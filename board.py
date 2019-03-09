@@ -1,16 +1,19 @@
 """This file is for the board class."""
 from copy import deepcopy
 from os import system
+from random import randint, seed
 
 # for semantic purpose
 MAX_COL = 4
 MAX_ROW = 4
+SHUFFLE = 1000
 
 class Board:
-    """
-    Board class which will be the one from where we create new objects.
-    """
+    """Models the board."""
+
     def __init__(self):
+        """Construct a board"""
+
         self.goal = [
             [" 1", " 2", " 3", " 4"],
             [" 5", " 6", " 7", " 8"],
@@ -21,6 +24,7 @@ class Board:
         # copying not referencing.
         self.board = deepcopy(self.goal)    # not self.goal, it will change the goal as both will point the same goal.
         self.empty_location = [MAX_ROW - 1, MAX_COL - 1]
+        self.moves = {0: self.move_up, 1: self.move_down, 2: self.move_left, 3: self.move_right}
 
     def __repr__(self):
         """
@@ -36,16 +40,33 @@ class Board:
         return ""
 
     def refresh(self):
-        """
-        This function refreshes the screen.
-        """
+        """This function refreshes the screen."""
+
         system("cls")
         print("Welcome to game of 15")
         print(self)
 
+    def shuffle(self):
+        """Shuffles the board from the start."""
+        seed()
+        for i in range(SHUFFLE):
+            m = randint(0, 3)
+            self.moves[m](self.board, self.empty_location )
+
+        # Move the empty location at bottom right.
+        for i in range(MAX_COL):
+            self.moves[1](self.board, self.empty_location)
+
+        for i in range(MAX_ROW):
+            self.moves[3](self.board, self.empty_location)
+
+    def solve(self):
+        """solves the game"""
+        self.board = deepcopy(self.goal)
+
     def move(self, board, empty_location, x, y):
         """
-        This function is used for defining a move.
+        This function is used for making a legal move.
         :param board: 2D array
         :param empty_location: Position in the array
         :param x: int value
@@ -76,28 +97,14 @@ class Board:
         return self.move(board, empty_location, -1, 0)
 
     def move_down(self, board, empty_location):
-        """
-        This function is used for move down
-        :param board: 2D array
-        :param empty_location: Position in the array
-        :return: Swapped board and updated empty location.
-        """
+        """This function is used for move down"""
         return self.move(board, empty_location, 1, 0)
     
     def move_left(self, board, empty_location):
-        """
-        This function is used for move left
-        :param board: 2D array
-        :param empty_location: Position in the array
-        :return: Swapped board and updated empty location.
-        """
+        """This function is used for move left"""
         return self.move(board, empty_location, 0, -1)
 
     def move_right(self, board, empty_location):
-        """
-        This function is used for move right
-        :param board: 2D array
-        :param empty_location: Position in the array
-        :return: Swapped board and updated empty location.
-        """
+        """This function is used for move right"""
         return self.move(board, empty_location, 0, 1)
+
