@@ -8,6 +8,7 @@ def main():
     """
     This is the main function.
     """
+    BOARD.shuffle()
     BOARD.refresh()
     # Collect events until released
     with keyboard.Listener(
@@ -37,6 +38,8 @@ def on_release(key):
         BOARD.board, BOARD.empty_location = BOARD.move_left(BOARD.board, BOARD.empty_location)
     elif key == keyboard.Key.right:
         BOARD.board, BOARD.empty_location = BOARD.move_right(BOARD.board, BOARD.empty_location)
+    elif key == keyboard.Key.shift:
+        BOARD.solve()
     elif key == keyboard.Key.esc:
         # Stop listener
         return False
