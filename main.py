@@ -2,6 +2,7 @@
 from pynput import keyboard
 from board import Board
 
+
 BOARD = Board()
 
 def main():
@@ -39,11 +40,16 @@ def on_release(key):
     elif key == keyboard.Key.right:
         BOARD.board, BOARD.empty_location = BOARD.move_right(BOARD.board, BOARD.empty_location)
     elif key == keyboard.Key.shift:
-        BOARD.solve()
+        print("Thinking...")
+        moves = BOARD.solve()
+        for move in moves:
+            BOARD.moves[move](BOARD.board, BOARD.empty_location)
+            BOARD.refresh()
+            
     elif key == keyboard.Key.esc:
         # Stop listener
         return False
-    BOARD.refresh()
+    return BOARD.refresh()
 
 if __name__ == '__main__':
     main()
