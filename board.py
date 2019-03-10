@@ -1,12 +1,13 @@
 """This file is for the board class."""
 from copy import deepcopy
 from os import system
+from queue import Queue
 from random import randint, seed
 
 # for semantic purpose
 MAX_COL = 4
 MAX_ROW = 4
-SHUFFLE = 1000
+SHUFFLE = 20
 
 class Board:
     """Models the board."""
@@ -46,6 +47,11 @@ class Board:
         print("Welcome to game of 15")
         print(self)
 
+        if self.goal == self.board:
+            print("\nCongrats! you've won.")
+            return False
+        return True
+
     def shuffle(self):
         """Shuffles the board from the start."""
         seed()
@@ -61,8 +67,44 @@ class Board:
             self.moves[3](self.board, self.empty_location)
 
     def solve(self):
-        """solves the game"""
-        self.board = deepcopy(self.goal)
+        """solves the game using BFS"""
+        def successors(board, empty_location):
+            board_list = [deepcopy(board), deepcopy(board), deepcopy(board), deepcopy(board)]   # up down ..
+            empty_location_list = [list(empty_location), list(empty_location), list(empty_location), list(empty_location)]
+
+            board_list[0], empty_location_list[0] = self.move_up(board_list[0], empty_location_list[0])
+            board_list[1], empty_location_list[1] = self.move_down(board_list[1], empty_location_list[1])
+            board_list[2], empty_location_list[2] = self.move_left(board_list[2], empty_location_list[2])
+            board_list[3], empty_location_list[3] = self.move_right(board_list[3], empty_location_list[3])
+
+            return [[board_list[0], empty_location_list[0], 0], [board_list[1], empty_location_list[1], 1], \
+                [board_list[2], empty_location_list[2], 2], [board_list[3], empty_location_list[3], 3]]
+
+        # Keeping track of the board state.
+        searched = set()
+        fringe = Queue()    # next moves in queue.
+        
+        fringe.put({"board": self.board, "empty_location": self.empty_location, "path": [] })
+
+        while True:
+            # Quit if no solution is found
+            if fringe.empty():
+                return []
+            
+            # Inspect current node
+            node = fringe.get()
+
+            if node["board"] == self.goal:
+                return node["path"]
+            
+            # Add current node to searched set: put children in fringe.
+            if str(node["board"]) not in searched:
+                searched.add(str(node["board"]))
+                for child in successors(node["board"], node["empty_location"]):
+                    if str(child[0]) not in searched:
+                        fringe.put({"board": child[0], "empty_location": child[1], "path": node["path"] + [child[2]]})
+
+
 
     def move(self, board, empty_location, x, y):
         """
