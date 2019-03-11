@@ -1,6 +1,7 @@
 """This is the main module"""
-from pynput import keyboard
 from board import Board
+from pynput import keyboard
+from time import sleep
 
 
 BOARD = Board()
@@ -45,6 +46,7 @@ def on_release(key):
         for move in moves:
             BOARD.moves[move](BOARD.board, BOARD.empty_location)
             BOARD.refresh()
+            sleep(1)
             
     elif key == keyboard.Key.esc:
         # Stop listener

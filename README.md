@@ -21,11 +21,15 @@ Say what the step will be
 Set up the virtual environment:
 
 * Install the virtual environment `pip install virtualenv`
-* Navigate to the project folder using command line using `cd`.
+* Navigate to the project folder in command line using `cd <folder_directory>`.
 * Put this command to create the virtual environment `virtualenv venv`
 
 * To begin using the virtual environment, it needs to be activated:
-`source venv/bin/activate`
+`.\venv\Scripts\activate`
 
 Install the requirements
 `pip install -r requirements.txt`
+
+### Running the project
+
+* Type `python main.py` in command line.

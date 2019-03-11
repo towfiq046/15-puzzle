@@ -7,7 +7,7 @@ from random import randint, seed
 # for semantic purpose
 MAX_COL = 4
 MAX_ROW = 4
-SHUFFLE = 20
+SHUFFLE = 10
 
 class Board:
     """Models the board."""
@@ -45,6 +45,7 @@ class Board:
 
         system("cls")
         print("Welcome to game of 15")
+        print("Press shift key to auto solve")
         print(self)
 
         if self.goal == self.board:
