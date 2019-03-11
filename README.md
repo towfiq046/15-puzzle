@@ -12,8 +12,6 @@ You will need python to run the project.
 
 * Python 3.7.x
 
-Download it from <a href="https://www.python.org/downloads/"> here </a>
-
 ### Installing
 
 A step by step series of examples that tell you how to get a development env running
@@ -31,4 +29,3 @@ Set up the virtual environment:
 
 Install the requirements
 `pip install -r requirements.txt`
-
